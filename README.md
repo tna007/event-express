@@ -11,9 +11,10 @@ The data for these endpoints is coming from Helsinki open API
 
 # How to install this project
   ```bash
-  npm install
-  
-  # How to start this project
+  npm install 
+
+# How to use this project
   ```bash
-  npm start
+  npm start 
+
   
