@@ -14,7 +14,7 @@ The data for these endpoints is coming from Helsinki open API
   npm install 
 
 # How to use this project
-  ```bash
+
   npm start 
 
   
