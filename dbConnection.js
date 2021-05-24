@@ -2,7 +2,7 @@ import { Pool, Client } from "pg";
 import { config } from "dotenv";
 import { App } from "shared-types";
 config();
-const connectionSettings: App.IConnectionSettings = {
+const connectionSettings = {
   user: process.env.USERNAME,
   password: process.env.PASSWORD,
   port: Number(process.env.CLOUD_PORT),
@@ -15,7 +15,7 @@ export function createPoolConnection() {
 }
 
 export async function createClienConnection() {
-  const client: Client = new Client(connectionSettings);
+  const client = new Client(connectionSettings);
   await client.connect();
   return client;
 }
