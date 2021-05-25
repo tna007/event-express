@@ -1,10 +1,12 @@
+const e = require("cors");
 var express = require("express");
 var router = express.Router();
 const fetch = require("node-fetch");
 
 /* GET Events page. */
 router.get("/events", async function (req, res, next) {
-  let jsonResponse = await getDataFromOpenAPI("events");
+  let category = req.query.category ? req.query.category : "";
+  let jsonResponse = await getDataFromOpenAPI("events", category);
   res.json(jsonResponse);
 });
 
@@ -14,25 +16,76 @@ router.get("/activities", async function (req, res, next) {
   res.json(jsonResponse);
 });
 
-function getDataFromOpenAPI(type) {
+/* GET water temprature page. */
+router.get("/beachTemp", async function (req, res, next) {
+  let jsonResponse = await getBeachTemp();
+  res.json(jsonResponse);
+});
+
+const getBeachTemp = () => {
   let URL = "";
-  switch (type) {
+  URL = "https://iot.fvh.fi/opendata/uiras/uiras2_v1.json";
+  return fetch(URL)
+    .then((response) => response.json())
+    .then((waterTempDataJson) => {
+      let responseJson = [];
+      for (const key in waterTempDataJson.sensors) {
+        if (Object.hasOwnProperty.call(waterTempDataJson.sensors, key)) {
+          const element = waterTempDataJson.sensors[key];
+          let beachTemp = {};
+          beachTemp.beachName = element.meta.name;
+          beachTemp.image =
+            "http://localhost:8080/images/" +
+            element.meta.name.replace(/\s/g, "") +
+            ".jpg";
+          beachTemp.waterTemp =
+            element.data[element.data.length - 1].temp_water;
+          beachTemp.airTemp = element.data[element.data.length - 1].temp_air;
+          beachTemp.time = element.data[element.data.length - 1].time;
+          responseJson.push(beachTemp);
+        }
+      }
+      return responseJson;
+    });
+};
+const getDataFromOpenAPI = (apiType, category) => {
+  let URL = "";
+  switch (apiType) {
     case "events":
-      URL = "http://open-api.myhelsinki.fi/v1/events/?language_filter=en&limit=20";
+      URL =
+        "http://open-api.myhelsinki.fi/v1/events/?language_filter=en&limit=20";
       break;
-      case "activities":
-        URL = "http://open-api.myhelsinki.fi/v1/activities/?language_filter=en&limit=5";
+    case "activities":
+      URL =
+        "http://open-api.myhelsinki.fi/v1/activities/?language_filter=en&limit=5";
       break;
-  
+
     default:
       break;
   }
   return fetch(URL)
     .then((response) => response.json())
-    .then((responseJson) => {
-      return responseJson;
+    .then((eventListJson) => {
+      let filteredEventList = [];
+      eventListJson.data.forEach((element) => {
+        if (category != "" && isInCategory(element, category)) {
+          filteredEventList.push(element);
+        }
+      });
+      return filteredEventList.length > 0
+        ? filteredEventList
+        : eventListJson.data;
     });
-}
+};
+const isInCategory = (element, category) => {
+  let retValue = false;
+  for (let tag of element.tags) {
+    if (tag.name == category) {
+      retValue = true;
+      break;
+    }
+  }
+  return retValue;
+};
 
 module.exports = router;
-
