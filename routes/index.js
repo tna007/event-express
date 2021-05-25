@@ -23,27 +23,24 @@ router.get("/beachTemp", async function (req, res, next) {
 });
 
 const getBeachTemp = () => {
-  let URL = "";
-  URL = "https://iot.fvh.fi/opendata/uiras/uiras2_v1.json";
+  let URL = "https://iot.fvh.fi/opendata/uiras/uiras2_v1.json";
   return fetch(URL)
     .then((response) => response.json())
     .then((waterTempDataJson) => {
       let responseJson = [];
       for (const key in waterTempDataJson.sensors) {
-        if (Object.hasOwnProperty.call(waterTempDataJson.sensors, key)) {
-          const element = waterTempDataJson.sensors[key];
-          let beachTemp = {};
-          beachTemp.beachName = element.meta.name;
-          beachTemp.image =
-            "http://localhost:8080/images/" +
-            element.meta.name.replace(/\s/g, "") +
-            ".jpg";
-          beachTemp.waterTemp =
-            element.data[element.data.length - 1].temp_water;
-          beachTemp.airTemp = element.data[element.data.length - 1].temp_air;
-          beachTemp.time = element.data[element.data.length - 1].time;
-          responseJson.push(beachTemp);
-        }
+        const element = waterTempDataJson.sensors[key];
+        let beachTemp = {};
+        beachTemp.id = key;
+        beachTemp.beachName = element.meta.name;
+        beachTemp.image =
+          "http://localhost:8080/images/" +
+          element.meta.name.replace(/\s/g, "") +
+          ".jpg";
+        beachTemp.waterTemp = element.data[element.data.length - 1].temp_water;
+        beachTemp.airTemp = element.data[element.data.length - 1].temp_air;
+        beachTemp.time = element.data[element.data.length - 1].time;
+        responseJson.push(beachTemp);
       }
       return responseJson;
     });
@@ -63,29 +60,15 @@ const getDataFromOpenAPI = (apiType, category) => {
     default:
       break;
   }
+  if (category != "") {
+    URL = URL + "&tags_filter=" + category;
+  }
   return fetch(URL)
     .then((response) => response.json())
     .then((eventListJson) => {
-      let filteredEventList = [];
-      eventListJson.data.forEach((element) => {
-        if (category != "" && isInCategory(element, category)) {
-          filteredEventList.push(element);
-        }
-      });
-      return filteredEventList.length > 0
-        ? filteredEventList
-        : eventListJson.data;
+     return eventListJson.data;
     });
 };
-const isInCategory = (element, category) => {
-  let retValue = false;
-  for (let tag of element.tags) {
-    if (tag.name == category) {
-      retValue = true;
-      break;
-    }
-  }
-  return retValue;
-};
+
 
 module.exports = router;
