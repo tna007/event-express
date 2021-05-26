@@ -1,9 +1,10 @@
 const express = require("express");
+var cors = require('cors')
 const app = express();
 var path = require('path');
 const indexRoutes = require("./routes");
 const profileRoutes = require("./routes/profileRoutes");
-
+app.use(cors())
 app.set("port", 8080);
 app.set("ip", "0.0.0.0");
 

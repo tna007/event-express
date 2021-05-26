@@ -1,5 +1,5 @@
 var createError = require('http-errors');
-var cors = require('cors')
+
 
 var express = require('../..');
 
@@ -10,7 +10,7 @@ var indexRouter = require('./routes/index');
 
 
 var app = express();
-app.use(cors())
+
 
 
 

@@ -1,4 +1,4 @@
-const e = require("cors");
+var cors = require('cors')
 var express = require("express");
 var router = express.Router();
 const fetch = require("node-fetch");
@@ -12,7 +12,7 @@ router.get("/events", async function (req, res, next) {
 
 /* GET Activities page. */
 router.get("/activities", async function (req, res, next) {
-  let jsonResponse = await getDataFromOpenAPI("activities");
+  let jsonResponse = await getDataFromOpenAPI("activities","");
   res.json(jsonResponse);
 });
 
@@ -54,7 +54,7 @@ const getDataFromOpenAPI = (apiType, category) => {
       break;
     case "activities":
       URL =
-        "http://open-api.myhelsinki.fi/v1/activities/?language_filter=en&limit=5";
+        "http://open-api.myhelsinki.fi/v1/activities/?language_filter=en&limit=20";
       break;
 
     default:
