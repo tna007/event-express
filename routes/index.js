@@ -66,9 +66,8 @@ const getDataFromOpenAPI = (apiType, category) => {
   return fetch(URL)
     .then((response) => response.json())
     .then((eventListJson) => {
-     return eventListJson.data;
+      return eventListJson.data;
     });
 };
-
 
 module.exports = router;
