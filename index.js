@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-
+var path = require('path');
 const indexRoutes = require("./routes");
 const profileRoutes = require("./routes/profileRoutes");
 
@@ -12,6 +12,7 @@ app.set("ip", "0.0.0.0");
     message: "Hello world from node",
   });
 }); */
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use("/", indexRoutes);
 app.use("/profile", profileRoutes);
