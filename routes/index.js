@@ -18,12 +18,14 @@ function getDataFromOpenAPI(type) {
   let URL = "";
   switch (type) {
     case "events":
-      URL = "http://open-api.myhelsinki.fi/v1/events/?language_filter=en&limit=20";
+      URL =
+        "http://open-api.myhelsinki.fi/v1/events/?language_filter=en&limit=20";
       break;
-      case "activities":
-        URL = "http://open-api.myhelsinki.fi/v1/activities/?language_filter=en&limit=5";
+    case "activities":
+      URL =
+        "http://open-api.myhelsinki.fi/v1/activities/?language_filter=en&limit=5";
       break;
-  
+
     default:
       break;
   }
@@ -35,4 +37,3 @@ function getDataFromOpenAPI(type) {
 }
 
 module.exports = router;
-
