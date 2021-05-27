@@ -1,7 +1,7 @@
 const express = require("express");
 var cors = require('cors')
 const app = express();
-var path = require('path');
+var path = require("path");
 const indexRoutes = require("./routes");
 const profileRoutes = require("./routes/profileRoutes");
 app.use(cors())
@@ -13,7 +13,7 @@ app.set("ip", "0.0.0.0");
     message: "Hello world from node",
   });
 }); */
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRoutes);
 app.use("/profile", profileRoutes);
@@ -22,7 +22,7 @@ app.get("*", (req, res) => {
   return res.send("error 404, page not found");
 });
 
-app.listen(app.get("port"), app.get("ip"), (err) => {
+app.listen(process.env.PORT || app.get("port"), app.get("ip"), (err) => {
   if (err) {
     throw Error;
   } else {
