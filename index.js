@@ -21,7 +21,7 @@ app.get("*", (req, res) => {
   return res.send("error 404, page not found");
 });
 
-app.listen(app.get("port") || 8080, app.get("ip"), (err) => {
+app.listen(process.env.PORT || app.get("port"), app.get("ip"), (err) => {
   if (err) {
     throw Error;
   } else {
