@@ -3,6 +3,7 @@ var cors = require('cors')
 const app = express();
 var path = require("path");
 const indexRoutes = require("./routes");
+const weatherRoutes = require("./routes/weather");
 const profileRoutes = require("./routes/profileRoutes");
 app.use(cors())
 app.set("port", 8080);
@@ -16,6 +17,7 @@ app.set("ip", "0.0.0.0");
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRoutes);
+app.use("/weather", weatherRoutes);
 app.use("/profile", profileRoutes);
 
 app.get("*", (req, res) => {
