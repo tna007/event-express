@@ -1,5 +1,5 @@
 # iknow-backend
-iknow summer project Node js backend 
+iknow summer project Expressjs backend 
 This is a backend exposing API endpoints 
 /events that returns the list of events happening in Helsinki
 
